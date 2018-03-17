@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,13 +16,13 @@ public class MainActivity extends AppCompatActivity {
 
     private ZXingScannerView scannerView;
     TextView txtBarcode;
+    EditText editBarcode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        txtBarcode = findViewById(R.id.txtBarcode);
 
     }
 
@@ -35,20 +36,23 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onPause() {
-        super.onPause();
         scannerView.stopCamera();
-
+        super.onPause();
     }
 
     class ZXingScanneResultHandler implements ZXingScannerView.ResultHandler {
         @Override
         public void handleResult(Result result) {
-            String resultCode = result.getText().toString();
-            txtBarcode.setText(resultCode);
-            Toast.makeText(MainActivity.this, resultCode, Toast.LENGTH_LONG).show();
             setContentView(R.layout.activity_main);
-            scannerView.stopCamera();
 
+            String resultCode = result.getText().toString();
+            txtBarcode = findViewById(R.id.txtBarcode);
+            editBarcode = findViewById(R.id.editBarcode);
+
+            editBarcode.setText(resultCode);
+            txtBarcode.setText("The barcode number:");
+            Toast.makeText(MainActivity.this, resultCode, Toast.LENGTH_LONG).show();
+            scannerView.stopCamera();
         }
     }
 }
